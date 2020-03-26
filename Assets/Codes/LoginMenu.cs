@@ -3,20 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class LoginMenu : MonoBehaviour
 {
-
 	public void PlayGame()
 	{
 		//SceneManager.LoadScene(0);
-		SceneManager.LoadScene("ActivitiesMenu");
+		SceneManager.LoadScene("MainMenu");
 		//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
 	
-	public void Logout()
+	public void QuitGame()
 	{
-		//Application.Quit();
-		SceneManager.LoadScene("LoginMenu");
+		Application.Quit();
 	}
-	
 }

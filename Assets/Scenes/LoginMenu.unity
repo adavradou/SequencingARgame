@@ -182,7 +182,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'My statistics
+  m_Text: 'Register
 
 
 '
@@ -207,7 +207,7 @@ GameObject:
   - component: {fileID: 267952526}
   - component: {fileID: 267952525}
   m_Layer: 5
-  m_Name: PlayButton
+  m_Name: LoginButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -336,7 +336,7 @@ GameObject:
   - component: {fileID: 379146496}
   - component: {fileID: 379146495}
   m_Layer: 5
-  m_Name: LogoutButton
+  m_Name: quitButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -403,7 +403,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 510084764}
-        m_MethodName: Logout
+        m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -522,7 +522,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Play
+  m_Text: Login
 --- !u!222 &385044982
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -642,7 +642,7 @@ GameObject:
   - component: {fileID: 510084763}
   - component: {fileID: 510084764}
   m_Layer: 5
-  m_Name: MainMenu
+  m_Name: LoginMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -679,7 +679,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 510084762}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e74e3f5084c06d4aa0b3a35dd8dbdd8, type: 3}
+  m_Script: {fileID: 11500000, guid: 44f217177cc68eb47a1170bb7dd600f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &517711297
@@ -695,7 +695,7 @@ GameObject:
   - component: {fileID: 517711300}
   - component: {fileID: 517711299}
   m_Layer: 5
-  m_Name: StatisticsButton
+  m_Name: RegisterButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1021,7 +1021,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Log out
+  m_Text: Quit
 --- !u!222 &1918713299
 CanvasRenderer:
   m_ObjectHideFlags: 0
