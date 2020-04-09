@@ -6,11 +6,26 @@ All Rights Reserved.
 Confidential and Proprietary - Protected under copyright and other laws.
 ==============================================================================*/
 
+
+/*
+CustomTrackableEventHandler that inherits from the ITrackableEventHandler.
+Each Image Target should run this instead of the DefaultTrackableEventHandler.
+
+Important requirement for this to work is to carefully put each Video/Activity to the Image Targets.
+More specifically, the Image Target's name, also shows the place in the sequence for this specific card.
+For example:
+If the correct sequence is [shower, wear pyjamas, go to sleep], then the video of showering should be 
+placed on the Image target with name "QR1_scaled", the wear pyjamas video, should be placed on the 
+Image Target "QR2_scaled", etc..
+
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 using Vuforia;
 
 /// <summary>
@@ -27,13 +42,20 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 	public TextMeshProUGUI concratsText; //	Variable for the 3D text displaying when game is completed.	
 	public AudioSource audioData; //Sound effect that plays when game is completed.
 	public AudioClip clip;
+	bool correctSequence = false;
 	bool gameCompleted = false; //Checks if game has been completed.	
+	
+	public Text trialsText; 
 
-	private int num = 3; //Number of QR codes in this game. Change it respectively.	
-	float x1, x2, x3;
-	int trials = -1;
-	string order = "";
-	string previousOrder = "";
+	int totalTrackablesNum; //Number of QR codes in this game. Change it respectively.	
+	
+
+	int trials = -1; //Keeps the number of user's trials till game completion.
+	string order = ""; //Keeps the current order of the cards.
+	string previousOrder = ""; //Keeps the previous order of the cards.
+	
+	float[] x_pos = new float[3]; //It stores the x position of each tracked card.
+	int[] sequenceOrder = new int[3]; //It stores the respective card order, e.g. [2, 1, 3]
 
     protected TrackableBehaviour mTrackableBehaviour;
     protected TrackableBehaviour.Status m_PreviousStatus;
@@ -42,11 +64,14 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
     #endregion // PROTECTED_MEMBER_VARIABLES
 
     #region UNITY_MONOBEHAVIOUR_METHODS
-
+	
+	
+	
     protected virtual void Start()
     {		
 		concratsText.enabled = false;
 		audioData = (AudioSource)gameObject.AddComponent<AudioSource>();
+		totalTrackablesNum = getTrackableNumber();
 
 		mTrackableBehaviour = GetComponent<TrackableBehaviour>();
         if (mTrackableBehaviour)
@@ -145,98 +170,173 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 		StateManager sm = TrackerManager.Instance.GetStateManager();
 		IList<TrackableBehaviour> activeTrackables = (IList<TrackableBehaviour>) sm.GetActiveTrackableBehaviours();
 		
-		if (gameCompleted == false) { 
+		if (gameCompleted == false) { 			
 			
-			if(activeTrackables.Count==num) //If all the QR codes of the game are currently tracked. 
-			{			
+			if(activeTrackables.Count == totalTrackablesNum) //If all the QR codes of the game are currently tracked. 
+			{
+				int index = 0;
+				
 				// Iterate through the list of active trackables
-				foreach (TrackableBehaviour tb in activeTrackables) {
+				foreach (TrackableBehaviour tb in activeTrackables) {					
+				
+					x_pos[index] = tb.transform.position.x; //Stores all the x positions (not in a sorted order).
 					
-					if (tb.TrackableName == "QR1_scaled"){ //If name contains "1"
-						x1 = tb.transform.position.x;
-						//Debug.Log(tb.TrackableName + " is at " + x1);
+					//Store the card order of the sequence, depending on the Image Target's name.
+					if (tb.TrackableName == "QR1_scaled"){ 
+						sequenceOrder[index] = 1;		
 					}
-					else if (tb.TrackableName == "QR2_scaled"){ //If name contains "2", etc...
-						x2 = tb.transform.position.x;
-						//Debug.Log(tb.TrackableName + " is at " + x2);
-					}
-					else if (tb.TrackableName == "QR3_scaled"){
-						x3 = tb.transform.position.x;
-						//Debug.Log(tb.TrackableName + " is at " + x3);
-					}
+					
+					if (tb.TrackableName == "QR2_scaled"){ 
+						sequenceOrder[index] = 2;		
+					}					
+					
+					if (tb.TrackableName == "QR3_scaled"){ 
+						sequenceOrder[index] = 3;
+					}	
 
-				}
-				
-				// for i in activeTrackables-1
-				// if x[i] <
-				
-				if ((x1 < x2) && (x2 < x3)){ //CHANGE!!
-					order = "123";
-				}
-				else if ((x1 < x3) && (x3 < x2)){
-					order = "132";
-				}
-				else if ((x2 < x1) && (x1 < x3)){
-					order = "213";
-				}
-				else if ((x2 < x3) && (x3 < x1)){
-					order = "231";
-				}
-				else if ((x3 < x2) && (x2 < x1)){
-					order = "321";
-				}			
-				else if ((x3 < x1) && (x1 < x2)){
-					order = "312";
-				}		
-				
-				if (order == "123"){
-					//trials = trials+1;
-					
-					if (order != previousOrder){
-						trials = trials+1;
-						previousOrder = order; 		
-						Debug.Log("!!!!!!!!!" + trials + "!!!!!!!!!!" + " " + order);					
+					if (tb.TrackableName == "QR4_scaled"){ 
+						sequenceOrder[index] = 4;		
 					}
 					
+					if (tb.TrackableName == "QR5_scaled"){ 
+						sequenceOrder[index] = 5;		
+					}					
+					
+					if (tb.TrackableName == "QR6_scaled"){ 
+						sequenceOrder[index] = 6;
+					}		
+					
+					if (tb.TrackableName == "QR7_scaled"){ 
+						sequenceOrder[index] = 7;		
+					}					
+					
+					if (tb.TrackableName == "QR8_scaled"){ 
+						sequenceOrder[index] = 8;
+					}	
+					
+					if (tb.TrackableName == "QR9_scaled"){ 
+						sequenceOrder[index] = 9;		
+					}					
+					
+					if (tb.TrackableName == "QR10_scaled"){ 
+						sequenceOrder[index] = 10;
+					}	
+				
+					index = index + 1;
+					
+				}
+				
+				sortArrays(x_pos, sequenceOrder);
+				
+				order = "";
+				for (int i = 0; i < sequenceOrder.Length; i++) 
+					order = order + sequenceOrder[i].ToString(); //Convert int array to string variable.
+				
+				correctSequence = isSorted(sequenceOrder); //Checks if sequence is correct.				
+	
+
+				if (correctSequence == true){ 				
+
+
+					trials = trials+1;
+					trialsText.GetComponent<Text>().text = trials.ToString(); //Update the trials count on the screen.
 					gameCompleted = true;
 					
-					Debug.Log("CONGRATULATIONS!!!!" + trials);
+					Debug.Log("CONGRATULATIONS! YOU WON!! Trials: " + trials + " Final Sequence: " + order);
 					
 					concratsText.enabled = true; //Display congratulations 3D shaded text. 
 					AudioSource.PlayClipAtPoint(clip, transform.position); 	//Play epic effect audio.				
 						
-					Invoke("GameComplete", 3f); //Wait 3 seconds before calling the GameComplete method.
-								
+					Invoke("GameComplete", 3f); //Wait 3 seconds before calling the GameComplete method.						
 					
 
 				}
 				else{
-					//Debug.Log("......" + trials + "........." + order + " " + previousOrder);
 					
-					if (order != previousOrder){
+					if (order != previousOrder){ //Checks if the user has changed the order of the cards.
 						trials = trials+1;
 						previousOrder = order; 		
-						Debug.Log("!!!!!!!!!" + trials + "!!!!!!!!!!" + " " + order);					
+						trialsText.GetComponent<Text>().text = trials.ToString(); //Update the trials count on the screen.
+						Debug.Log("..... Trials: " + trials + "......" + " Current order: " + order);					
 					}
-				}	
-				
-
-				
-			}
-			else //If not all the QR codes are currently tracked. 
-			{
-			}					
-			
-			
+				}					
+			}			
 		}
-
-
-
 	}
 	
+	
+	public int getTrackableNumber()
+	{
+		/*
+		Depending on the scene name, the number of total trackables number is different. 
+		Returns the respective number.
+		*/
+		
+		Scene m_Scene;
+		string sceneName;
+		m_Scene = SceneManager.GetActiveScene();
+		sceneName = m_Scene.name;
+		
+		if (sceneName == "ARscene")
+			return 3;
+		else
+			return 0;
+		//TO FIX: IMPLEMENT IN THE FUTURE MORE NUMBERS DEPENDING ON ALL THE SCENES.	
+	}
+	
+
+    static bool isSorted(int [] arr) 
+    {   
+	/*
+	Checks if the cards' names are placed in ascending order.
+	If yes, then that means that also the activities are in correct order.
+	*/
+        for (int i = 0; i < arr.Length - 1; i++) 
+			
+            // Unsorted pair found 
+            if (arr[i] > arr[i+1]) 
+                return false; 
+  
+        // No unsorted pair found 
+        return true; 
+    } 
+	
+	
+	public static (float[], int[]) sortArrays(float[] pos, int[] order)
+	{
+	/*
+	Sorts two arrays, the x-positions of the cards and their respective names.
+	*/		
+        float pos_temp; 
+		int order_temp;		
+  
+        // traverse 0 to array length 
+        for (int i = 0; i < pos.Length - 1; i++) 
+  
+            // traverse i+1 to array length 
+            for (int j = i + 1; j < pos.Length; j++) 
+  
+                // compare array element with  
+                // all next element 
+                if (pos[i] > pos[j]) { 
+  
+                    pos_temp = pos[i]; 
+                    pos[i] = pos[j]; 
+                    pos[j] = pos_temp; 
+							
+                    order_temp = order[i]; 
+                    order[i] = order[j]; 
+                    order[j] = order_temp; 					
+					
+                } 				
+				return (pos, order);		
+	}
+
+
 	void GameComplete(){
 		FindObjectOfType<GameSceneManager>().GoToActivitiesMenu(); //Return to Activities menu.
 	}
-
+	
+	
     #endregion // PROTECTED_METHODS
 }

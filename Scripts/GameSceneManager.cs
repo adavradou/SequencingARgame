@@ -7,8 +7,8 @@ public class GameSceneManager : MonoBehaviour
 {
 	public void GoToMainMenu()
 	{
-		//SceneManager.LoadScene(0);
 		SceneManager.LoadScene("MainMenu");
+		//SceneManager.LoadScene(0);		
 		//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
 	
@@ -20,30 +20,24 @@ public class GameSceneManager : MonoBehaviour
 
 	public void GoToActivitiesMenu()
 	{
-		//SceneManager.LoadScene(0);
 		SceneManager.LoadScene("ActivitiesMenu");
-		//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
 		
 	
 	public void Logout()
 	{
-		//Application.Quit();
 		SceneManager.LoadScene("LoginMenu");
 	}	
 
 
 	public void GoToLevel_1()
 	{
-		//SceneManager.LoadScene(0);
 		SceneManager.LoadScene("ARscene");
-		//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
 	
 	
 	public void GoBack()
 	{
-		//Application.Quit();
 		SceneManager.LoadScene("MainMenu");
 	}
 }
