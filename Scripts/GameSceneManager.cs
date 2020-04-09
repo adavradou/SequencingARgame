@@ -18,26 +18,20 @@ public class GameSceneManager : MonoBehaviour
 	}
 
 
-
-//public class MainMenu : MonoBehaviour
-
 	public void GoToActivitiesMenu()
 	{
 		//SceneManager.LoadScene(0);
 		SceneManager.LoadScene("ActivitiesMenu");
 		//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
+		
 	
 	public void Logout()
 	{
 		//Application.Quit();
 		SceneManager.LoadScene("LoginMenu");
-	}
-	
+	}	
 
-
-
-//public class ActivitiesMenu : MonoBehaviour
 
 	public void GoToLevel_1()
 	{
@@ -45,6 +39,7 @@ public class GameSceneManager : MonoBehaviour
 		SceneManager.LoadScene("ARscene");
 		//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
+	
 	
 	public void GoBack()
 	{
