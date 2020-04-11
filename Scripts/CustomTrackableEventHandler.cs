@@ -39,18 +39,19 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
     #region PROTECTED_MEMBER_VARIABLES
 	
 	//Initialize variables.	
-	public TextMeshProUGUI concratsText; //	Variable for the 3D text displaying when game is completed.	
+	public TextMeshProUGUI congratsText; //	Variable for the 3D text displaying when game is completed.	
 	public AudioSource audioData; //Sound effect that plays when game is completed.
 	public AudioClip clip;
 	bool correctSequence = false;
 	bool gameCompleted = false; //Checks if game has been completed.	
 	
-	public Text trialsText; 
+	public Text attemptsText; 
+	public Text shuffleText;
 
 	int totalTrackablesNum; //Number of QR codes in this game. Change it respectively.	
 	
 
-	int trials = -1; //Keeps the number of user's trials till game completion.
+	int attempts = -1; //Keeps the number of user's attempts till game completion.
 	string order = ""; //Keeps the current order of the cards.
 	string previousOrder = ""; //Keeps the previous order of the cards.
 	
@@ -69,7 +70,8 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 	
     protected virtual void Start()
     {		
-		concratsText.enabled = false;
+		congratsText.enabled = false;
+		shuffleText.enabled = false;
 		audioData = (AudioSource)gameObject.AddComponent<AudioSource>();
 		totalTrackablesNum = getTrackableNumber();
 
@@ -235,33 +237,53 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 				correctSequence = isSorted(sequenceOrder); //Checks if sequence is correct.				
 	
 
-				if (correctSequence == true){ 				
+				if (correctSequence == true){ 	
+
+					Debug.Log("correctSequence");
 
 
-					trials = trials+1;
-					trialsText.GetComponent<Text>().text = trials.ToString(); //Update the trials count on the screen.
-					gameCompleted = true;
-					
-					Debug.Log("CONGRATULATIONS! YOU WON!! Trials: " + trials + " Final Sequence: " + order);
-					
-					concratsText.enabled = true; //Display congratulations 3D shaded text. 
-					AudioSource.PlayClipAtPoint(clip, transform.position); 	//Play epic effect audio.				
+					if (attempts == -1)
+					{
+						Debug.Log("attempts are 0:");
+						//Visualize a text to shiffle the cards
+						//shuffleText. enabled = true;
+						StartCoroutine(ShowMessage(3));
+					}
+					else{
+						Debug.Log("attempts are NOT 0:" + attempts);
+						attempts = attempts+1;
+						attemptsText.GetComponent<Text>().text = attempts.ToString(); //Update the attempts count on the screen.
+						gameCompleted = true;
 						
-					Invoke("GameComplete", 3f); //Wait 3 seconds before calling the GameComplete method.						
-					
+						Debug.Log("CONGRATULATIONS! YOU WON!! Attempts: " + attempts + " Final Sequence: " + order);
+						
+						congratsText.enabled = true; //Display congratulations 3D shaded text. 
+						AudioSource.PlayClipAtPoint(clip, transform.position); 	//Play epic effect audio.				
+							
+						Invoke("GameComplete", 3f); //Wait 3 seconds before calling the GameComplete method.								
+					}					
 
 				}
 				else{
 					
 					if (order != previousOrder){ //Checks if the user has changed the order of the cards.
-						trials = trials+1;
+						attempts = attempts+1;
 						previousOrder = order; 		
-						trialsText.GetComponent<Text>().text = trials.ToString(); //Update the trials count on the screen.
-						Debug.Log("..... Trials: " + trials + "......" + " Current order: " + order);					
+						attemptsText.GetComponent<Text>().text = attempts.ToString(); //Update the attempts count on the screen.
+						Debug.Log("..... Attempts: " + attempts + "......" + " Current order: " + order);					
 					}
 				}					
 			}			
 		}
+	}
+	
+	
+	public IEnumerator ShowMessage (float delay)
+	{
+		Debug.Log("MPHKE!!!!! eprepe na deixnei");
+		shuffleText.enabled = true;
+		yield return new WaitForSeconds(delay);
+		shuffleText.enabled = false;
 	}
 	
 	
