@@ -26,6 +26,7 @@ public class GameSceneManager : MonoBehaviour
 	
 	public void Logout()
 	{
+		//FindObjectOfType<AuthController>().Logout(); //Return to Activities menu.
 		SceneManager.LoadScene("LoginMenu");
 	}	
 
@@ -39,5 +40,10 @@ public class GameSceneManager : MonoBehaviour
 	public void GoBack()
 	{
 		SceneManager.LoadScene("MainMenu");
+	}
+	
+	public void GoToSaveLoadMenu()
+	{
+		SceneManager.LoadScene("SaveLoad");
 	}
 }
