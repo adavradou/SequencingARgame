@@ -316,7 +316,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &303717608
 GameObject:
@@ -1251,6 +1251,7 @@ MonoBehaviour:
   failedText: {fileID: 374983707}
   audioData: {fileID: 137243201}
   clip: {fileID: 8300000, guid: f51adcd026925cf4abbefb2af4288db3, type: 3}
+  firebaseManager: {fileID: 0}
   attemptsText: {fileID: 1131923919}
   shuffleText: {fileID: 1212155822}
   countdownText: {fileID: 9695538}
@@ -1344,7 +1345,7 @@ Transform:
   m_Children:
   - {fileID: 2086503946}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!21 &957955734
 Material:
@@ -1374,49 +1375,6 @@ Material:
     m_Floats: []
     m_Colors:
     - _Color: {r: 0.82089555, g: 0.82089555, b: 0.82089555, a: 1}
---- !u!1 &990349064
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 990349066}
-  - component: {fileID: 990349065}
-  m_Layer: 0
-  m_Name: QuitARObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &990349065
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 990349064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd97e0c85ad73d443a7500e8c0289a7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &990349066
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 990349064}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 494.70105, y: 362.3701, z: -3.4886117}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1131923917
 GameObject:
   m_ObjectHideFlags: 0
@@ -1885,7 +1843,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1714503237
 GameObject:
@@ -2162,6 +2120,7 @@ MonoBehaviour:
   failedText: {fileID: 374983707}
   audioData: {fileID: 137243201}
   clip: {fileID: 8300000, guid: f51adcd026925cf4abbefb2af4288db3, type: 3}
+  firebaseManager: {fileID: 0}
   attemptsText: {fileID: 1131923919}
   shuffleText: {fileID: 1212155822}
   countdownText: {fileID: 9695538}
@@ -2198,7 +2157,7 @@ Transform:
   m_Children:
   - {fileID: 363337845}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1742977720
 GameObject:
@@ -2294,6 +2253,7 @@ MonoBehaviour:
   failedText: {fileID: 374983707}
   audioData: {fileID: 137243201}
   clip: {fileID: 8300000, guid: f51adcd026925cf4abbefb2af4288db3, type: 3}
+  firebaseManager: {fileID: 0}
   attemptsText: {fileID: 1131923919}
   shuffleText: {fileID: 1212155822}
   countdownText: {fileID: 9695538}
@@ -2330,7 +2290,7 @@ Transform:
   m_Children:
   - {fileID: 672755639}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &1842032402
 Mesh:
@@ -2492,6 +2452,49 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1948006496
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1948006497}
+  - component: {fileID: 1948006498}
+  m_Layer: 0
+  m_Name: FirebaseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1948006497
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948006496}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 360.6733, y: 174.55429, z: -191.69792}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1948006498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948006496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 523b185020027a94f85e326c69c5723b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1959169966
 Mesh:
   m_ObjectHideFlags: 0

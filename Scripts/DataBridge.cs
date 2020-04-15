@@ -18,7 +18,8 @@ public class DataBridge : MonoBehaviour
 	
 	private DatabaseReference databaseReference;
 	
-	string usrEmail = "adavradou@gmail.com";
+	string usrEmail = "adavradougmailcom";
+	string levelName = "level_1_showering";
 
 
 	void Start()
@@ -48,7 +49,7 @@ public class DataBridge : MonoBehaviour
 		//databaseReference.Child("adavradougmailcom").SetRawJsonValueAsync(jsonData);
 
 		//databaseReference.Child(usrEmail).SetRawJsonValueAsync(jsonData);
-		databaseReference.Child("adavradougmailcom").Child("level1showering").SetRawJsonValueAsync(jsonData);
+		databaseReference.Child(usrEmail).Child(levelName).SetRawJsonValueAsync(jsonData);
 
 
 		//databaseReference.Child("Users").SetRawJsonValueAsync(jsonData);		

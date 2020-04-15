@@ -14,7 +14,7 @@ public class MainMenuAuthenticationControler : MonoBehaviour
 		if (FirebaseAuth.DefaultInstance.CurrentUser != null)
 		{
 			FirebaseAuth.DefaultInstance.SignOut();
-			print("Used logged out.");
+			print("User logged out.");
 		}
 	}
 	

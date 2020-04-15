@@ -46,14 +46,17 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 	bool correctSequence = false;
 	bool gameCompleted = false; //Checks if game has been completed.	
 	
+	public FirebaseManager firebaseManager;
+	
 	public Text attemptsText; 
 	public Text shuffleText;
 	public Text countdownText;
 
 	int totalTrackablesNum; //Number of QR codes in this game. Change it respectively.	
 	
-	float targetTime = 10f; //TO FIX: 	Make it public to change it for every scene
-	
+	float startTime = 15f; //TO FIX: 	Make it public to change it for every scene
+	float remainingTime;
+	int intRemainingTime;
 
 	int attempts = -1; //Keeps the number of user's attempts till game completion.
 	string order = ""; //Keeps the current order of the cards.
@@ -79,6 +82,7 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 		shuffleText.enabled = false;
 		audioData = (AudioSource)gameObject.AddComponent<AudioSource>();
 		totalTrackablesNum = getTrackableNumber();
+		remainingTime = startTime;
 
 		mTrackableBehaviour = GetComponent<TrackableBehaviour>();
         if (mTrackableBehaviour)
@@ -177,11 +181,18 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 		StateManager sm = TrackerManager.Instance.GetStateManager();
 		IList<TrackableBehaviour> activeTrackables = (IList<TrackableBehaviour>) sm.GetActiveTrackableBehaviours();
 		
-		if (targetTime <= 0.0f)
+		if (remainingTime <= 0.0f && failedText.enabled == false )
 		{
+		//The "failedText.enabled == false" in the if statement is used because the script run on all the image targets, and thus each of them would write on the Firebase.
+
 			failedText.enabled = true;
 			countdownText.enabled = false; 
 			Debug.Log("TIME ENDED");
+
+			//string initialTime = ((int) startTime + intRemainingTime).ToString();	
+			FindObjectOfType<FirebaseManager>().SaveData(attempts.ToString(), startTime.ToString(), "no"); //Write game statistics to Firebase.			
+							
+			
 			Invoke("GameComplete", 2f); //Wait 2 seconds before calling the GameComplete method.
 			//timeEnded();
 			//TO FIX: Later will call the timeEnded method, which will lead to another scene, showing the correct answer.
@@ -189,9 +200,9 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 		else{
 			if (gameCompleted == false) { 			
 			
-				targetTime -= Time.deltaTime;
-				int intTime = (int) targetTime;
-				countdownText.GetComponent<Text>().text =  "Time remaining: " + intTime.ToString(); //Update the remaining time on the screen.		
+				remainingTime -= Time.deltaTime;
+				intRemainingTime = (int) remainingTime;
+				countdownText.GetComponent<Text>().text =  "Time remaining: " + intRemainingTime.ToString(); //Update the remaining time on the screen.		
 				
 				if(activeTrackables.Count == totalTrackablesNum) //If all the QR codes of the game are currently tracked. 
 				{
@@ -264,7 +275,7 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 						if (attempts == -1)
 						{
 							Debug.Log("attempts are 0:");
-							//Visualize a text to shiffle the cards
+							//Visualize a text to shuffle the cards
 							//shuffleText. enabled = true;
 							StartCoroutine(ShowMessage(3));
 						}
@@ -276,8 +287,17 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 							
 							Debug.Log("CONGRATULATIONS! YOU WON!! Attempts: " + attempts + " Final Sequence: " + order);
 							
+							string gameDuration = ((int) startTime - intRemainingTime).ToString();
+							if (congratsText.enabled == false){ 
+							//The if statement is used because the script run on all the image targets, and thus each of them would write on the Firebase.
+								FindObjectOfType<FirebaseManager>().SaveData(attempts.ToString(), gameDuration, "yes"); //Write game statistics to Firebase.		
+							}			
+													
 							congratsText.enabled = true; //Display congratulations 3D shaded text. 
-							AudioSource.PlayClipAtPoint(clip, transform.position); 	//Play epic effect audio.				
+							AudioSource.PlayClipAtPoint(clip, transform.position); 	//Play epic effect audio.			
+
+
+
 								
 							Invoke("GameComplete", 3f); //Wait 3 seconds before calling the GameComplete method.								
 						}					
@@ -302,7 +322,6 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 	
 	public IEnumerator ShowMessage (float delay)
 	{
-		Debug.Log("MPHKE!!!!! eprepe na deixnei");
 		shuffleText.enabled = true;
 		yield return new WaitForSeconds(delay);
 		shuffleText.enabled = false;
@@ -378,7 +397,10 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 
 
 	void GameComplete(){
+		//FindObjectOfType<FirebaseManager>().SaveData("hi", "hello", "yes"); //Write game statistics to Firebase.
+
 		FindObjectOfType<GameSceneManager>().GoToActivitiesMenu(); //Return to Activities menu.
+		
 	}
 	
 	

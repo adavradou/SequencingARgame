@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Firebase.Auth;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 public class LoginMenuAuthenticationControler : MonoBehaviour
 {
@@ -11,91 +12,130 @@ public class LoginMenuAuthenticationControler : MonoBehaviour
 	public InputField emailInput, passwordInput; 
 	public GameSceneManager gameSceneManager;
 	bool loginSuccessful;
+	bool registerSuccessful;
+	public Text FirebaseErrorText;
+	
+	string loginError = "";
+	string registerError = "";
 
 	
     protected virtual void Start()
     {		
 		loginSuccessful = false;
+		registerSuccessful = false;
+		FirebaseErrorText.enabled = false;
     }	
 	
-	public void Login()
+	public async void Login()
 	{
-		//bool loginSuccessful = true;
+		print("BEFORE!");
+		await LoginToDB_ReturnTask();
+		print("AFTER!");
 		
-		FirebaseAuth.DefaultInstance.SignInWithEmailAndPasswordAsync(emailInput.text, passwordInput.text).ContinueWith(task => {
+		if (loginSuccessful == true)
+		{
+			goToMainMenu();
+		}
+		else{
+			FirebaseErrorText.text = loginError;
+			StartCoroutine(ShowMessage(3));			
+		}
+	}
+	
+	public Task LoginToDB_ReturnTask() // Note the return type, not async
+	{
+		
+		return FirebaseAuth.DefaultInstance.SignInWithEmailAndPasswordAsync(emailInput.text, passwordInput.text).ContinueWith(task => {
 			
 			if (task.IsCanceled) {
 				Firebase.FirebaseException e = task.Exception.Flatten().InnerExceptions[0] as Firebase.FirebaseException;				
-				GetErrorMessage((AuthError)e.ErrorCode);
+
+				AuthError msg = (AuthError)e.ErrorCode;
+				loginError = msg.ToString();
+				print("Error: " + loginError);
+				
 				return;
 			}
 			if (task.IsFaulted) {
 				Firebase.FirebaseException e = task.Exception.Flatten().InnerExceptions[0] as Firebase.FirebaseException;				
-				GetErrorMessage((AuthError)e.ErrorCode);
+				
+				AuthError msg = (AuthError)e.ErrorCode;
+				loginError = msg.ToString();
+				print("Error: " + loginError);				
+				
 				return;
 			}
 			if (task.IsCompleted) {
 				print("Login successful!");
 				loginSuccessful = true;				
 			}
-
-		});
-		
-		if (loginSuccessful == true)
-		{
-			goToMainMenu();
-		}	
-		else{
-			print("loginSuccessful was not true");
-		}		
-	}
-
-
-	public void Register()
-	{
-		
-		if (emailInput.text.Equals("") && passwordInput.text.Equals(""))
-		{
-			print("Please enter an email and password to register");
-			return;
-		}
-		FirebaseAuth.DefaultInstance.CreateUserWithEmailAndPasswordAsync(emailInput.text, passwordInput.text).ContinueWith(task => {
-			
-			if (task.IsCanceled) {
-				Firebase.FirebaseException e = task.Exception.Flatten().InnerExceptions[0] as Firebase.FirebaseException;				
-				GetErrorMessage((AuthError)e.ErrorCode);
-				return;
-			}
-			
-			if (task.IsFaulted) {
-				Firebase.FirebaseException e = task.Exception.Flatten().InnerExceptions[0] as Firebase.FirebaseException;				
-				GetErrorMessage((AuthError)e.ErrorCode);
-				return;
-			}
-			
-			if (task.IsCompleted) {
-				print("Registration complete successfully!");
-			}
-
+		return;
 		});		
 	}
 
-	
-	void GetErrorMessage(AuthError errorCode)
+
+
+
+	public async void Register()
 	{
-		string msg = "";
-		msg = errorCode.ToString();
+		print("BEFORE!");
+		await RegisterToDB_ReturnTask();
+		print("AFTER!");
+		
+		if (registerSuccessful == true)
+		{
+			goToMainMenu();
+		}
+		else{
+			FirebaseErrorText.text = registerError;
+			StartCoroutine(ShowMessage(3));			
+		}
+	}
+	
+	public Task RegisterToDB_ReturnTask() // Note the return type, not async
+	{
+		
+		return FirebaseAuth.DefaultInstance.CreateUserWithEmailAndPasswordAsync(emailInput.text, passwordInput.text).ContinueWith(task => {
 			
-		print(msg);
+			if (task.IsCanceled) {
+				Firebase.FirebaseException e = task.Exception.Flatten().InnerExceptions[0] as Firebase.FirebaseException;				
+
+				AuthError msg = (AuthError)e.ErrorCode;
+				registerError = msg.ToString();
+				print("Error: " + registerError);
+				
+				return;
+			}
+			if (task.IsFaulted) {
+				Firebase.FirebaseException e = task.Exception.Flatten().InnerExceptions[0] as Firebase.FirebaseException;				
+				
+				AuthError msg = (AuthError)e.ErrorCode;
+				registerError = msg.ToString();
+				print("Error: " + registerError);				
+				
+				return;
+			}
+			if (task.IsCompleted) {
+				print("Registration complete successfully!");
+				registerSuccessful = true;				
+			}
+		return;
+		});		
+	}
+
+
+
+
+	public IEnumerator ShowMessage (float delay)
+	{
+		FirebaseErrorText.enabled = true;
+		yield return new WaitForSeconds(delay);
+		FirebaseErrorText.enabled = false;
 	}
 	
 	
 	void goToMainMenu(){
-		print("I am in.");
-		gameSceneManager.GoToSaveLoadMenu(); //Go to Main menu.
-		//FindObjectOfType<GameSceneManager>().GoToMainMenu(); //Gi to Main menu.
-
-		print("... and out.");
+		gameSceneManager.GoToMainMenu(); //Go to Main menu.
 	}
 
 }
