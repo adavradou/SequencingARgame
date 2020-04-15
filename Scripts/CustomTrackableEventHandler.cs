@@ -54,7 +54,7 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 
 	int totalTrackablesNum; //Number of QR codes in this game. Change it respectively.	
 	
-	float startTime = 15f; //TO FIX: 	Make it public to change it for every scene
+	float startTime = 55f; //TO FIX: 	Make it public to change it for every scene
 	float remainingTime;
 	int intRemainingTime;
 
@@ -62,8 +62,8 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 	string order = ""; //Keeps the current order of the cards.
 	string previousOrder = ""; //Keeps the previous order of the cards.
 	
-	float[] x_pos = new float[3]; //It stores the x position of each tracked card.
-	int[] sequenceOrder = new int[3]; //It stores the respective card order, e.g. [2, 1, 3]
+	float[] x_pos = new float[5]; //TO FIX: (make the number change depending on totalTrackablesNum) It stores the x position of each tracked card.
+	int[] sequenceOrder = new int[5]; //TO FIX: (make the number change depending on totalTrackablesNum)  It stores the respective card order, e.g. [2, 1, 3]
 
     protected TrackableBehaviour mTrackableBehaviour;
     protected TrackableBehaviour.Status m_PreviousStatus;
@@ -340,8 +340,12 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 		m_Scene = SceneManager.GetActiveScene();
 		sceneName = m_Scene.name;
 		
-		if (sceneName == "ARscene")
+		if (sceneName == "Showering_level_1")
 			return 3;
+		else if (sceneName == "Showering_level_2") 
+			return 4;
+		else if (sceneName == "Showering_level_3") 
+			return 5;
 		else
 			return 0;
 		//TO FIX: IMPLEMENT IN THE FUTURE MORE NUMBERS DEPENDING ON ALL THE SCENES.	

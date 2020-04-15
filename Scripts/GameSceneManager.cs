@@ -30,20 +30,64 @@ public class GameSceneManager : MonoBehaviour
 		SceneManager.LoadScene("LoginMenu");
 	}	
 
-
-	public void GoToLevel_1()
-	{
-		SceneManager.LoadScene("ARscene");
-	}
-	
 	
 	public void GoBack()
 	{
 		SceneManager.LoadScene("MainMenu");
 	}
 	
-	public void GoToSaveLoadMenu()
+	public void GoToStatisticsScene()
 	{
-		SceneManager.LoadScene("SaveLoad");
+		SceneManager.LoadScene("StatisticsScene");
 	}
+	
+	//Showering activity.
+	public void GoToShoweringLevel_1()
+	{
+		SceneManager.LoadScene("Showering_level_1");
+	}	
+	
+	public void GoToShoweringLevel_2()
+	{
+		SceneManager.LoadScene("Showering_level_2");
+	}	
+
+	public void GoToShoweringLevel_3()
+	{
+		SceneManager.LoadScene("Showering_level_3");
+	}	
+
+	//Going to school activity.
+	public void GoToSchoolLevel_1()
+	{
+		SceneManager.LoadScene("School_level_1");
+	}	
+	
+	public void GoToSchoolLevel_2()
+	{
+		SceneManager.LoadScene("School_level_2");
+	}	
+
+	public void GoToSchoolLevel_3()
+	{
+		SceneManager.LoadScene("School_level_3");
+	}		
+	
+	//Brushing the teeth activity. 
+	public void GoToTeethLevel_1()
+	{
+		SceneManager.LoadScene("Teeth_level_1");
+	}	
+	
+	public void GoToTeethLevel_2()
+	{
+		SceneManager.LoadScene("Teeth_level_2");
+	}	
+
+	public void GoToTeethLevel_3()
+	{
+		SceneManager.LoadScene("Teeth_level_3");
+	}		
+		
+
 }

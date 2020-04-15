@@ -20,8 +20,8 @@ public class FirebaseManager : MonoBehaviour
 	private string DATA_URL = "https://sequencingargame.firebaseio.com/";	
 	private DatabaseReference databaseReference;
 	
-	string usrEmail = "adavradougmailcom";
-	string levelName = "level_1_showering";
+	string usrEmail = "adavradougmailcom"; //TO FIX: PASS FROM OTHER SCENE
+	string levelName = "Showering_level_1"; //TO FIX: PASS FROM OTHER SCENE
 	
 	bool loadSuccessful;
 	string loadError = "";
@@ -47,7 +47,7 @@ public class FirebaseManager : MonoBehaviour
 		string activityStatisticsText = ""; //Keeps the stats of all 3 (?) levels to display them together.
 		
 		resetLevelValues();			
-		await LoadData_ReturnTask("level_1_showering"); //Load the data for the 1st level.		
+		await LoadData_ReturnTask("Showering_level_1"); //Load the data for the 1st level.		
 		
 		if (loadSuccessful == true)
 		{					
@@ -60,7 +60,7 @@ public class FirebaseManager : MonoBehaviour
 		
 		resetLevelValues();		
 		
-		await LoadData_ReturnTask("level_2_showering"); //Load the data for the 2nd level.		
+		await LoadData_ReturnTask("Showering_level_2"); //Load the data for the 2nd level.		
 		
 		if (loadSuccessful == true)
 		{					
@@ -70,7 +70,21 @@ public class FirebaseManager : MonoBehaviour
 		else{
 			//TO FIX: DISPLAY ERROR MESSAGE.
 		}
-			
+
+		resetLevelValues();		
+		
+		await LoadData_ReturnTask("Showering_level_3"); //Load the data for the 2nd level.		
+		
+		if (loadSuccessful == true)
+		{					
+			activityStatisticsText = activityStatisticsText + "Level 3: \n";			
+			activityStatisticsText = activityStatisticsText + getLevelStatistics(AttemptsList, DurationList, LevelPassedList) + "\n";			
+		}
+		else{
+			//TO FIX: DISPLAY ERROR MESSAGE.
+		}
+
+		
 		//Display the statistics of all levels of this activity on the UI.
 		StatisticsBoardText.text = activityStatisticsText;
 		StatisticsBoardText.enabled = true;		
