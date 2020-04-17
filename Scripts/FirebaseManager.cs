@@ -21,7 +21,7 @@ public class FirebaseManager : MonoBehaviour
 	private DatabaseReference databaseReference;
 	
 	string usrEmail = "adavradougmailcom"; //TO FIX: PASS FROM OTHER SCENE
-	string levelName = "Showering_level_1"; //TO FIX: PASS FROM OTHER SCENE
+	//string levelName = "Showering_level_1"; //TO FIX: PASS FROM OTHER SCENE
 	
 	bool loadSuccessful;
 	string loadError = "";
@@ -140,7 +140,7 @@ public class FirebaseManager : MonoBehaviour
 	}
 
 	
-	public void SaveData(string attempts, string time, string passed)
+	public void SaveData(string attempts, string time, string passed, string levelName)
 	{
 		
 		//DateTime now = DateTime.Now;

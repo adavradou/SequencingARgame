@@ -18,7 +18,7 @@ public class PlaySolutionVideo : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-		videoPlayer.url = "Assets/Resources/03_level1.mp4";
+		videoPlayer.url = "Assets/Resources/03_level1.mp4";  //TO FIX: play video depending on the level.
 		StartCoroutine(PlayVideo());
         
     }

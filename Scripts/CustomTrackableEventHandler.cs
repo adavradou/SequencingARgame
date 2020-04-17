@@ -54,7 +54,7 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 
 	int totalTrackablesNum; //Number of QR codes in this game. Change it respectively.	
 	
-	float startTime = 55f; //TO FIX: 	Make it public to change it for every scene
+	float startTime; 
 	float remainingTime;
 	int intRemainingTime;
 
@@ -62,8 +62,10 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 	string order = ""; //Keeps the current order of the cards.
 	string previousOrder = ""; //Keeps the previous order of the cards.
 	
-	float[] x_pos = new float[5]; //TO FIX: (make the number change depending on totalTrackablesNum) It stores the x position of each tracked card.
-	int[] sequenceOrder = new int[5]; //TO FIX: (make the number change depending on totalTrackablesNum)  It stores the respective card order, e.g. [2, 1, 3]
+	float[] x_pos;  //It stores the x position of each tracked card.
+	int[] sequenceOrder; // It stores the respective card order, e.g. [2, 1, 3]
+	
+	string sceneName;
 
     protected TrackableBehaviour mTrackableBehaviour;
     protected TrackableBehaviour.Status m_PreviousStatus;
@@ -81,8 +83,29 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 		failedText.enabled = false;
 		shuffleText.enabled = false;
 		audioData = (AudioSource)gameObject.AddComponent<AudioSource>();
-		totalTrackablesNum = getTrackableNumber();
-		remainingTime = startTime;
+		
+		sceneName = getActiveSceneName(); //Get the name of the active scene. 
+		totalTrackablesNum = getTrackableNumber(); //Get the number of trackables in the current level.
+		
+		startTime = getLevelTime(); //Get the start time of the current level (e.g. 40s).
+		remainingTime = startTime;		
+
+		//Create the array depending on the number of trackables.
+		if (totalTrackablesNum == 3)
+		{
+			x_pos = new float[3];
+			sequenceOrder = new int[3];
+		}
+		else if (totalTrackablesNum == 4)
+		{
+			x_pos = new float[4];
+			sequenceOrder = new int[4];
+		}
+		else if (totalTrackablesNum == 5)
+		{
+			x_pos = new float[5];
+			sequenceOrder = new int[5];
+		}						
 
 		mTrackableBehaviour = GetComponent<TrackableBehaviour>();
         if (mTrackableBehaviour)
@@ -187,10 +210,9 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 
 			failedText.enabled = true;
 			countdownText.enabled = false; 
-			Debug.Log("TIME ENDED");
+			Debug.Log("TIME ENDED");			
 
-			//string initialTime = ((int) startTime + intRemainingTime).ToString();	
-			FindObjectOfType<FirebaseManager>().SaveData(attempts.ToString(), startTime.ToString(), "no"); //Write game statistics to Firebase.			
+			FindObjectOfType<FirebaseManager>().SaveData(attempts.ToString(), startTime.ToString(), "no", sceneName); //Write game statistics to Firebase.			
 							
 			
 			Invoke("GameComplete", 2f); //Wait 2 seconds before calling the GameComplete method.
@@ -209,7 +231,10 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 					int index = 0;
 					
 					// Iterate through the list of active trackables
-					foreach (TrackableBehaviour tb in activeTrackables) {					
+					foreach (TrackableBehaviour tb in activeTrackables) {	
+
+						print("TRACKABLE BEVAVIOR: " + tb);
+						print("x_POS: " + tb.transform.position.x);
 					
 						x_pos[index] = tb.transform.position.x; //Stores all the x positions (not in a sorted order).
 						
@@ -286,11 +311,11 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 							gameCompleted = true;
 							
 							Debug.Log("CONGRATULATIONS! YOU WON!! Attempts: " + attempts + " Final Sequence: " + order);
-							
+											
 							string gameDuration = ((int) startTime - intRemainingTime).ToString();
 							if (congratsText.enabled == false){ 
 							//The if statement is used because the script run on all the image targets, and thus each of them would write on the Firebase.
-								FindObjectOfType<FirebaseManager>().SaveData(attempts.ToString(), gameDuration, "yes"); //Write game statistics to Firebase.		
+								FindObjectOfType<FirebaseManager>().SaveData(attempts.ToString(), gameDuration, "yes", sceneName); //Write game statistics to Firebase.		
 							}			
 													
 							congratsText.enabled = true; //Display congratulations 3D shaded text. 
@@ -327,6 +352,23 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 		shuffleText.enabled = false;
 	}
 	
+	public float getLevelTime()
+	{
+		/*
+		Depending on the scene name, the available time of the countdown timer changes.. 
+		Returns the respective time of the level.
+		*/
+		
+		if (sceneName.Contains("level_1"))		
+			return 20f;
+		else if (sceneName.Contains("level_2")) 
+			return 40f;
+		else if (sceneName.Contains("level_3"))
+			return 60f;
+		else
+			return 0;		
+	}
+	
 	
 	public int getTrackableNumber()
 	{
@@ -335,24 +377,31 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 		Returns the respective number.
 		*/
 		
-		Scene m_Scene;
-		string sceneName;
-		m_Scene = SceneManager.GetActiveScene();
-		sceneName = m_Scene.name;
-		
-		if (sceneName == "Showering_level_1")
+		if (sceneName.Contains("level_1"))		
 			return 3;
-		else if (sceneName == "Showering_level_2") 
+		else if (sceneName.Contains("level_2")) 
 			return 4;
-		else if (sceneName == "Showering_level_3") 
+		else if (sceneName.Contains("level_3"))
 			return 5;
 		else
 			return 0;
-		//TO FIX: IMPLEMENT IN THE FUTURE MORE NUMBERS DEPENDING ON ALL THE SCENES.	
 	}
 	
+	string getActiveSceneName()
+	{
+		/*
+		Returns the active's scene name.
+		*/
+		
+		Scene m_Scene;
+		string currentScene;
+		m_Scene = SceneManager.GetActiveScene();
+		currentScene = m_Scene.name;
+		
+		return currentScene;
+	}
 
-    static bool isSorted(int [] arr) 
+    bool isSorted(int [] arr) 
     {   
 	/*
 	Checks if the cards' names are placed in ascending order.
@@ -369,7 +418,7 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
     } 
 	
 	
-	public static (float[], int[]) sortArrays(float[] pos, int[] order)
+	public (float[], int[]) sortArrays(float[] pos, int[] order)
 	{
 	/*
 	Sorts two arrays, the x-positions of the cards and their respective names.
@@ -401,10 +450,7 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 
 
 	void GameComplete(){
-		//FindObjectOfType<FirebaseManager>().SaveData("hi", "hello", "yes"); //Write game statistics to Firebase.
-
-		FindObjectOfType<GameSceneManager>().GoToActivitiesMenu(); //Return to Activities menu.
-		
+		FindObjectOfType<GameSceneManager>().GoToActivitiesMenu(); //Return to Activities menu.		
 	}
 	
 	

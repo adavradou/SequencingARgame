@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuAuthenticationControler : MonoBehaviour
 {
-
 	
 	public void Logout()
 	{

@@ -15,6 +15,7 @@ public class LoginMenuAuthenticationControler : MonoBehaviour
 	bool registerSuccessful;
 	public Text FirebaseErrorText;
 	
+	
 	string loginError = "";
 	string registerError = "";
 
@@ -28,9 +29,7 @@ public class LoginMenuAuthenticationControler : MonoBehaviour
 	
 	public async void Login()
 	{
-		print("BEFORE!");
 		await LoginToDB_ReturnTask();
-		print("AFTER!");
 		
 		if (loginSuccessful == true)
 		{
@@ -42,7 +41,7 @@ public class LoginMenuAuthenticationControler : MonoBehaviour
 		}
 	}
 	
-	public Task LoginToDB_ReturnTask() // Note the return type, not async
+	private Task LoginToDB_ReturnTask() // Note the return type, not async
 	{
 		
 		return FirebaseAuth.DefaultInstance.SignInWithEmailAndPasswordAsync(emailInput.text, passwordInput.text).ContinueWith(task => {
@@ -78,13 +77,11 @@ public class LoginMenuAuthenticationControler : MonoBehaviour
 
 	public async void Register()
 	{
-		print("BEFORE!");
 		await RegisterToDB_ReturnTask();
-		print("AFTER!");
 		
 		if (registerSuccessful == true)
 		{
-			goToMainMenu();
+			print("Register successful!");
 		}
 		else{
 			FirebaseErrorText.text = registerError;
@@ -92,7 +89,7 @@ public class LoginMenuAuthenticationControler : MonoBehaviour
 		}
 	}
 	
-	public Task RegisterToDB_ReturnTask() // Note the return type, not async
+	private Task RegisterToDB_ReturnTask() // Note the return type, not async
 	{
 		
 		return FirebaseAuth.DefaultInstance.CreateUserWithEmailAndPasswordAsync(emailInput.text, passwordInput.text).ContinueWith(task => {
@@ -126,7 +123,7 @@ public class LoginMenuAuthenticationControler : MonoBehaviour
 
 
 
-	public IEnumerator ShowMessage (float delay)
+	IEnumerator ShowMessage (float delay)
 	{
 		FirebaseErrorText.enabled = true;
 		yield return new WaitForSeconds(delay);
