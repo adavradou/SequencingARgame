@@ -37,17 +37,39 @@ public class FirebaseManager : MonoBehaviour
 		databaseReference = FirebaseDatabase.DefaultInstance.RootReference;				
 		StatisticsBoardText.enabled = false;
 	}
+	
+	
+	public void LoadDataShower()
+	{			
+		string selectedActivity = "Showering";
+		LoadData(selectedActivity);		
+	}
+		
+	public void LoadDataSchool()
+	{			
+		string selectedActivity = "School";
+		LoadData(selectedActivity);		
+	}
 
+	public void LoadDataTeeth()
+	{			
+		string selectedActivity = "Teeth";
+		LoadData(selectedActivity);		
+	}
+						
+	public async void LoadData(string activityName)
+	{
 
-	public async void LoadData()
-	{	
 		/*The data of each level for the selected activity are loaded separately and all the stats are saved on a string. 
 		Then they are displayed on a GUI text.*/
 		
 		string activityStatisticsText = ""; //Keeps the stats of all 3 (?) levels to display them together.
 		
 		resetLevelValues();			
-		await LoadData_ReturnTask("Showering_level_1"); //Load the data for the 1st level.		
+		await LoadData_ReturnTask(activityName+"_level_1"); //Load the data for the 1st level.			
+		
+		
+		
 		
 		if (loadSuccessful == true)
 		{					
@@ -60,7 +82,7 @@ public class FirebaseManager : MonoBehaviour
 		
 		resetLevelValues();		
 		
-		await LoadData_ReturnTask("Showering_level_2"); //Load the data for the 2nd level.		
+		await LoadData_ReturnTask(activityName+"_level_2"); //Load the data for the 2nd level.		
 		
 		if (loadSuccessful == true)
 		{					
@@ -73,7 +95,7 @@ public class FirebaseManager : MonoBehaviour
 
 		resetLevelValues();		
 		
-		await LoadData_ReturnTask("Showering_level_3"); //Load the data for the 2nd level.		
+		await LoadData_ReturnTask(activityName+"_level_3"); //Load the data for the 2nd level.		
 		
 		if (loadSuccessful == true)
 		{					
@@ -169,13 +191,20 @@ public class FirebaseManager : MonoBehaviour
 		//Computes the statistics of the user's loaded data.
 		string levelStatsText;		
 		int timesPlayed = passed.Count;		
-		string best_time = findMinFloat(time);		
-		string fewer_attempts = findMinInt(attempts);		
-		int times_passed = countOccurences(passed, "yes");		
-		double success_rate =  Math.Round(((double)(times_passed / (double)timesPlayed)) * 100, 2);		
 		
-		levelStatsText = ("\t Time played: " + timesPlayed.ToString() + "\n" + "\t Fewer attempts: " + fewer_attempts + "\n" + "\t Best time: " + best_time + "\n" + "\t Succcess rate: " + success_rate.ToString() + "%\n");
-				
+		if (timesPlayed != 0){
+			string best_time = findMinFloat(time);		
+			string fewer_attempts = findMinInt(attempts);		
+			int times_passed = countOccurences(passed, "yes");		
+			double success_rate =  Math.Round(((double)(times_passed / (double)timesPlayed)) * 100, 2);		
+			levelStatsText = ("\t Time played: " + timesPlayed.ToString() + "\n" + "\t Fewer attempts: " + fewer_attempts + "\n" + "\t Best time: " + best_time + "\n" + "\t Succcess rate: " + success_rate.ToString() + "%\n");
+			
+		}
+		else
+		{				
+			levelStatsText = ("\t Time played: " + "-" + "\n" + "\t Fewer attempts: " + "-" + "\n" + "\t Best time: " + "-" + "\n" + "\t Succcess rate: " + "-" + "\n");			
+		}
+		
 		return levelStatsText;
 	}
 	
