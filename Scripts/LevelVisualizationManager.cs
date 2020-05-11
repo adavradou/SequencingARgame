@@ -9,12 +9,13 @@ using System;
 using Firebase.Auth;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using System.Linq;
 
 
 public class LevelVisualizationManager : MonoBehaviour
 {
 	
-	string currentUser = "adavradougmailcom"; // TO FIX: get it from static or something. 
+	string usrEmail = CurrentUser.getUserEmail(); //Get the current user's email. 
 
 	private string DATA_URL = "https://sequencingargame.firebaseio.com/";	
 	private DatabaseReference databaseReference;
@@ -33,11 +34,20 @@ public class LevelVisualizationManager : MonoBehaviour
 	public Button teethButton_level_2;
 	public Button teethButton_level_3;	
 
+
 	void Start()
 	{
 		FirebaseApp.DefaultInstance.SetEditorDatabaseUrl(DATA_URL);		
-		databaseReference = FirebaseDatabase.DefaultInstance.RootReference;			
-		VisualizePassedLevels();
+		databaseReference = FirebaseDatabase.DefaultInstance.RootReference;		
+		
+		//Remove the "@" and "." from the email, as it will be used for  username on the Firebase.
+		usrEmail = new string ((from c in usrEmail
+						  where char.IsLetterOrDigit(c)
+						  select c
+			   ).ToArray());
+		
+		VisualizePassedLevels();				
+
 	}
 	
 	void resetValues()
@@ -112,7 +122,7 @@ public class LevelVisualizationManager : MonoBehaviour
 	
 	public Task LoadDataManager(string activityName, string activityLevel)
 	{
-		return databaseReference.Child(currentUser + "_"+ activityName + "_" + activityLevel).GetValueAsync().ContinueWith((task => {
+		return databaseReference.Child(usrEmail + "_"+ activityName + "_" + activityLevel).GetValueAsync().ContinueWith((task => {
 			
 			if (task.IsCanceled) {
 				Firebase.FirebaseException e = task.Exception.Flatten().InnerExceptions[0] as Firebase.FirebaseException;				
@@ -154,10 +164,6 @@ public class LevelVisualizationManager : MonoBehaviour
 		}));			
 		
 	}	
-	
-	
-	
-	
 	
 	
 	

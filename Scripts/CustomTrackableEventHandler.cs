@@ -84,7 +84,7 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 		shuffleText.enabled = false;
 		audioData = (AudioSource)gameObject.AddComponent<AudioSource>();
 		
-		sceneName = getActiveSceneName(); //Get the name of the active scene. 
+		sceneName = GameSceneManager.getActiveSceneName(); //Get the name of the active scene. 
 		totalTrackablesNum = getTrackableNumber(); //Get the number of trackables in the current level.
 		
 		startTime = getLevelTime(); //Get the start time of the current level (e.g. 40s).
@@ -216,7 +216,7 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 							
 			
 			Invoke("GameComplete", 2f); //Wait 2 seconds before calling the GameComplete method.
-			//timeEnded();
+			timeEnded();
 			//TO FIX: Later will call the timeEnded method, which will lead to another scene, showing the correct answer.
 		}
 		else{
@@ -360,11 +360,11 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 		*/
 		
 		if (sceneName.Contains("level_1"))		
-			return 20f;
-		else if (sceneName.Contains("level_2")) 
-			return 40f;
-		else if (sceneName.Contains("level_3"))
 			return 60f;
+		else if (sceneName.Contains("level_2")) 
+			return 90f;
+		else if (sceneName.Contains("level_3"))
+			return 120f;
 		else
 			return 0;		
 	}
@@ -387,19 +387,7 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 			return 0;
 	}
 	
-	string getActiveSceneName()
-	{
-		/*
-		Returns the active's scene name.
-		*/
-		
-		Scene m_Scene;
-		string currentScene;
-		m_Scene = SceneManager.GetActiveScene();
-		currentScene = m_Scene.name;
-		
-		return currentScene;
-	}
+
 
     bool isSorted(int [] arr) 
     {   
@@ -448,8 +436,14 @@ public class CustomTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 				return (pos, order);		
 	}
 
+	void timeEnded()
+	{
+		CurrentUser.setLevelPlayed(sceneName);
+		FindObjectOfType<GameSceneManager>().goToSolutionsScene(); //Transition to the solutions scene to watch the correct sequence of the cards.		
+	}
 
-	void GameComplete(){
+	void GameComplete()
+	{
 		FindObjectOfType<GameSceneManager>().GoToActivitiesMenu(); //Return to Activities menu.		
 	}
 	

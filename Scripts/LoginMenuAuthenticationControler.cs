@@ -33,6 +33,9 @@ public class LoginMenuAuthenticationControler : MonoBehaviour
 		
 		if (loginSuccessful == true)
 		{
+			//GetComponent<CurrentUser>().setUserEmail(emailInput.text);
+			//GetComponent<CurrentUser>().setUserEmail(emailInput.text);
+			CurrentUser.setUserEmail(emailInput.text);
 			goToMainMenu();
 		}
 		else{

@@ -9,6 +9,7 @@ using System;
 using Firebase.Auth;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using System.Linq;
 
 
 public class FirebaseManager : MonoBehaviour
@@ -20,8 +21,7 @@ public class FirebaseManager : MonoBehaviour
 	private string DATA_URL = "https://sequencingargame.firebaseio.com/";	
 	private DatabaseReference databaseReference;
 	
-	string usrEmail = "adavradougmailcom"; //TO FIX: PASS FROM OTHER SCENE
-	//string levelName = "Showering_level_1"; //TO FIX: PASS FROM OTHER SCENE
+	string usrEmail = CurrentUser.getUserEmail(); //Get the current user's email. 
 	
 	bool loadSuccessful;
 	string loadError = "";
@@ -35,7 +35,13 @@ public class FirebaseManager : MonoBehaviour
 	{
 		FirebaseApp.DefaultInstance.SetEditorDatabaseUrl(DATA_URL);		
 		databaseReference = FirebaseDatabase.DefaultInstance.RootReference;				
-		StatisticsBoardText.enabled = false;
+		StatisticsBoardText.enabled = false;	
+
+		//Remove the "@" and "." from the email, as it will be used for  username on the Firebase.
+		usrEmail = new string ((from c in usrEmail
+						  where char.IsLetterOrDigit(c)
+						  select c
+			   ).ToArray());
 	}
 	
 	
@@ -197,12 +203,12 @@ public class FirebaseManager : MonoBehaviour
 			string fewer_attempts = findMinInt(attempts);		
 			int times_passed = countOccurences(passed, "yes");		
 			double success_rate =  Math.Round(((double)(times_passed / (double)timesPlayed)) * 100, 2);		
-			levelStatsText = ("\t Time played: " + timesPlayed.ToString() + "\n" + "\t Fewer attempts: " + fewer_attempts + "\n" + "\t Best time: " + best_time + "\n" + "\t Succcess rate: " + success_rate.ToString() + "%\n");
+			levelStatsText = ("\t Time played: " + timesPlayed.ToString() + "\n" + "\t Fewer attempts: " + fewer_attempts + "\n" + "\t Best time: " + best_time + "\n" + "\t Success rate: " + success_rate.ToString() + "%\n");
 			
 		}
 		else
 		{				
-			levelStatsText = ("\t Time played: " + "-" + "\n" + "\t Fewer attempts: " + "-" + "\n" + "\t Best time: " + "-" + "\n" + "\t Succcess rate: " + "-" + "\n");			
+			levelStatsText = ("\t Time played: " + "-" + "\n" + "\t Fewer attempts: " + "-" + "\n" + "\t Best time: " + "-" + "\n" + "\t Success rate: " + "-" + "\n");			
 		}
 		
 		return levelStatsText;
@@ -220,8 +226,7 @@ public class FirebaseManager : MonoBehaviour
 		} 
 	  
 		return count; 
-	} 
-  
+	}   
 	
 	
 	private string findMinInt (List<string> stringList)

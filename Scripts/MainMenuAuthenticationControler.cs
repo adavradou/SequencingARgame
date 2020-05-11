@@ -25,7 +25,4 @@ public class MainMenuAuthenticationControler : MonoBehaviour
 			
 		print(msg);
 	}
-	
-
-
 }

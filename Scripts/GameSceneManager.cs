@@ -41,6 +41,26 @@ public class GameSceneManager : MonoBehaviour
 		SceneManager.LoadScene("StatisticsScene");
 	}
 	
+	
+	static public string getActiveSceneName()
+	{
+		/*
+		Returns the active's scene name.
+		*/
+		
+		Scene m_Scene;
+		string currentScene;
+		m_Scene = SceneManager.GetActiveScene();
+		currentScene = m_Scene.name;
+		
+		return currentScene;
+	}	
+	
+	public void goToSolutionsScene()
+	{
+		SceneManager.LoadScene("SolutionsScene");
+	}
+	
 	//Showering activity.
 	public void GoToShoweringLevel_1()
 	{
