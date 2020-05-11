@@ -14,7 +14,7 @@ public class LoginMenuAuthenticationControler : MonoBehaviour
 	bool loginSuccessful;
 	bool registerSuccessful;
 	public Text FirebaseErrorText;
-	
+	public Text FirebaseSuccessText;
 	
 	string loginError = "";
 	string registerError = "";
@@ -25,6 +25,7 @@ public class LoginMenuAuthenticationControler : MonoBehaviour
 		loginSuccessful = false;
 		registerSuccessful = false;
 		FirebaseErrorText.enabled = false;
+		FirebaseSuccessText.enabled = false;
     }	
 	
 	public async void Login()
@@ -40,7 +41,7 @@ public class LoginMenuAuthenticationControler : MonoBehaviour
 		}
 		else{
 			FirebaseErrorText.text = loginError;
-			StartCoroutine(ShowMessage(3));			
+			StartCoroutine(ShowMessage(3, FirebaseErrorText));			
 		}
 	}
 	
@@ -84,11 +85,13 @@ public class LoginMenuAuthenticationControler : MonoBehaviour
 		
 		if (registerSuccessful == true)
 		{
-			print("Register successful!");
+			print("Registration successful!");
+			FirebaseSuccessText.text = "Registration successful!";
+			StartCoroutine(ShowMessage(3, FirebaseSuccessText));		
 		}
 		else{
 			FirebaseErrorText.text = registerError;
-			StartCoroutine(ShowMessage(3));			
+			StartCoroutine(ShowMessage(3, FirebaseErrorText));			
 		}
 	}
 	
@@ -126,11 +129,11 @@ public class LoginMenuAuthenticationControler : MonoBehaviour
 
 
 
-	IEnumerator ShowMessage (float delay)
+	IEnumerator ShowMessage (float delay, Text buttonName)
 	{
-		FirebaseErrorText.enabled = true;
+		buttonName.enabled = true;
 		yield return new WaitForSeconds(delay);
-		FirebaseErrorText.enabled = false;
+		buttonName.enabled = false;
 	}
 	
 	

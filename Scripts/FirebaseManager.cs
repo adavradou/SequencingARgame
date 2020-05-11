@@ -200,7 +200,11 @@ public class FirebaseManager : MonoBehaviour
 		
 		if (timesPlayed != 0){
 			string best_time = findMinFloat(time);		
-			string fewer_attempts = findMinInt(attempts);		
+			string fewer_attempts = findMinInt(attempts);	
+			if (fewer_attempts == "-1"){
+				fewer_attempts = "0";
+			}
+			
 			int times_passed = countOccurences(passed, "yes");		
 			double success_rate =  Math.Round(((double)(times_passed / (double)timesPlayed)) * 100, 2);		
 			levelStatsText = ("\t Time played: " + timesPlayed.ToString() + "\n" + "\t Fewer attempts: " + fewer_attempts + "\n" + "\t Best time: " + best_time + "\n" + "\t Success rate: " + success_rate.ToString() + "%\n");

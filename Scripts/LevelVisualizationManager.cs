@@ -44,9 +44,9 @@ public class LevelVisualizationManager : MonoBehaviour
 		usrEmail = new string ((from c in usrEmail
 						  where char.IsLetterOrDigit(c)
 						  select c
-			   ).ToArray());
-		
-		VisualizePassedLevels();				
+			   ).ToArray());		
+			
+		VisualizePassedLevels(); //Make visible only the first and passed levels.					
 
 	}
 	
@@ -60,63 +60,59 @@ public class LevelVisualizationManager : MonoBehaviour
 	public async void VisualizePassedLevels()
 	{
 		//For the buttons of the Showering activity. 
-		resetValues();
-		await LoadDataManager("Showering", "level_1");
-		
-		if (levelPassedFlag == false)
-		{
-			showerButton_level_2.gameObject.SetActive(false);
-			showerButton_level_3.gameObject.SetActive(false);
+		resetValues();		
+		//Check if level 1 is passed. If yes, show level 2.
+		await LoadDataManager("Showering", "level_1");		
+		if (levelPassedFlag == true)
+		{			
+			showerButton_level_2.gameObject.SetActive(true);
 		}
-		else{
-			resetValues();
-			await LoadDataManager("Showering", "level_2");	
-			
-			if (levelPassedFlag == false)
-			{
-				showerButton_level_3.gameObject.SetActive(false);
-			}				
-		}		
-		
-		
+
+		resetValues();
+		//Check if level 2 is passed. If yes, show level 3.
+		await LoadDataManager("Showering", "level_2");			
+		if (levelPassedFlag == true)
+		{
+			showerButton_level_3.gameObject.SetActive(true);
+		}				
+				
+				
 		//For the buttons of the School activity. 
-		resetValues();
-		await LoadDataManager("School", "level_1");
-		
-		if (levelPassedFlag == false)
+		resetValues();		
+		//Check if level 1 is passed. If yes, show level 2.
+		await LoadDataManager("School", "level_1");		
+		if (levelPassedFlag == true)
 		{
-			schoolButton_level_2.gameObject.SetActive(false);
-			schoolButton_level_3.gameObject.SetActive(false);
+			schoolButton_level_2.gameObject.SetActive(true);
 		}
-		else{
-			resetValues();
-			await LoadDataManager("School", "level_2");	
-			
-			if (levelPassedFlag == false)
-			{
-				schoolButton_level_3.gameObject.SetActive(false);
-			}
-		}			
+		
+		resetValues();
+		//Check if level 2 is passed. If yes, show level 3.		
+		await LoadDataManager("School", "level_2");			
+		if (levelPassedFlag == true)
+		{
+			schoolButton_level_3.gameObject.SetActive(true);
+		}					
 	
 
 		//For the buttons of the Teeth activity. 
 		resetValues();
-		await LoadDataManager("Teeth", "level_1");
-		
-		if (levelPassedFlag == false)
+		//Check if level 1 is passed. If yes, show level 2.
+		await LoadDataManager("Teeth", "level_1");		
+		if (levelPassedFlag == true)
 		{
-			teethButton_level_2.gameObject.SetActive(false);
-			teethButton_level_3.gameObject.SetActive(false);
+			teethButton_level_2.gameObject.SetActive(true);
+			teethButton_level_3.gameObject.SetActive(true);
 		}
-		else{
-			resetValues();
-			await LoadDataManager("Teeth", "level_2");	
-			
-			if (levelPassedFlag == false)
-			{
-				teethButton_level_3.gameObject.SetActive(false);
-			}
-		}		
+		
+		resetValues();
+		//Check if level 2 is passed. If yes, show level 3.
+		await LoadDataManager("Teeth", "level_2");			
+		if (levelPassedFlag == true)
+		{
+			teethButton_level_3.gameObject.SetActive(true);
+		}
+				
 		
 	}
 	

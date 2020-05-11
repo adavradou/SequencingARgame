@@ -41,6 +41,11 @@ public class GameSceneManager : MonoBehaviour
 		SceneManager.LoadScene("StatisticsScene");
 	}
 	
+	public void GoToHowToPlayScene()
+	{
+		SceneManager.LoadScene("HowToPlayScene");
+	}
+	
 	
 	static public string getActiveSceneName()
 	{
