@@ -18,14 +18,81 @@ public class LoginMenuAuthenticationControler : MonoBehaviour
 	
 	string loginError = "";
 	string registerError = "";
-
+	
+	public Text screenText;
 	
     protected virtual void Start()
     {		
 		loginSuccessful = false;
 		registerSuccessful = false;
 		FirebaseErrorText.enabled = false;
-		FirebaseSuccessText.enabled = false;
+		FirebaseSuccessText.enabled = false;		
+		
+		//DisplayMetricsAndroid();
+		//int width = (int)DisplayMetricsAndroid.XDPI; // or something else
+		//int height= (int)DisplayMetricsAndroid.YDPI; // or something else
+			/*
+		int width = (int)DisplayMetricsAndroid.WidthPixels; // or something else
+		int height= (int)DisplayMetricsAndroid.HeightPixels; // or something else			
+		bool isFullScreen = false; // should be windowed to run in arbitrary resolution
+		int desiredFPS = 60; // or something else		
+			
+		print("HeightPixels: " + DisplayMetricsAndroid.HeightPixels);
+		print("WidthPixels: " + DisplayMetricsAndroid.WidthPixels);
+		print("XDPI: " + DisplayMetricsAndroid.XDPI);
+		print("YDPI: " + DisplayMetricsAndroid.YDPI);
+
+		screenText.text = "HeightPixels: " + DisplayMetricsAndroid.HeightPixels + "WidthPixels: " + DisplayMetricsAndroid.WidthPixels + "XDPI: " + DisplayMetricsAndroid.XDPI + "YDPI: " + DisplayMetricsAndroid.YDPI;
+		
+		
+		//var widthInInches = Screen.width / Screen.dpi;
+		
+		/*
+		int width = 512; // or something else
+		int height= 512; // or something else
+		bool isFullScreen = false; // should be windowed to run in arbitrary resolution
+		int desiredFPS = 60; // or something else
+	 
+       //Screen.SetResolution (width , height, isFullScreen, desiredFPS );
+		
+		//1080 x 2340
+		var widthInInches = 1080;
+		var heightInInches = 2340;
+        Screen.SetResolution ((int)widthInInches , (int)heightInInches, true );
+		
+
+		if (PlayerPrefs.GetInt("width", 0) == 0)
+		{
+			PlayerPrefs.SetInt("width", Screen.width);
+			PlayerPrefs.SetInt("height", Screen.height);
+		}
+		int res=1;
+		int width = (int)(PlayerPrefs.GetInt("width") *res);
+		int height = (int)(PlayerPrefs.GetInt("height")* res);
+				
+		screenText.text = "width: " + width.ToString() + "height: "+ height.ToString();
+
+		Screen.SetResolution(width, height, false);
+		
+		
+		//int width = (int)DisplayMetricsAndroid.XDPI; // or something else
+		//int height= (int)DisplayMetricsAndroid.YDPI; // or something else
+			
+		int width = (int)DisplayMetricsAndroid.WidthPixels; // or something else
+		int height= (int)DisplayMetricsAndroid.HeightPixels; // or something else			
+		bool isFullScreen = false; // should be windowed to run in arbitrary resolution
+		int desiredFPS = 60; // or something else		
+			
+		print("HeightPixels: " + DisplayMetricsAndroid.HeightPixels);
+		print("WidthPixels: " + DisplayMetricsAndroid.WidthPixels);
+		print("XDPI: " + DisplayMetricsAndroid.XDPI);
+		print("YDPI: " + DisplayMetricsAndroid.YDPI);
+
+		screenText.text = "HeightPixels: " + DisplayMetricsAndroid.HeightPixels.ToString() + "WidthPixels: " + DisplayMetricsAndroid.WidthPixels + "XDPI: " + DisplayMetricsAndroid.XDPI + "YDPI: " + DisplayMetricsAndroid.YDPI;
+					 
+		Screen.SetResolution (width , height, isFullScreen );   
+		*/
+	   
     }	
 	
 	public async void Login()
